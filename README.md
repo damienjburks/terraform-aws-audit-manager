@@ -402,7 +402,7 @@ MIT Licensed. See [LICENSE](./LICENSE) for full details.
 
 ## Authors
 
-Module is maintained by [Damien Burks](https://github.com/damienjburks)
+Module is maintained by [Damien Burks](https://github.com/damienjburks). Contributions are welcomed!
 
 ## Additional Resources
 

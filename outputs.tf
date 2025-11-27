@@ -11,7 +11,7 @@ output "audit_manager_enabled" {
 
 output "audit_manager_service_role_arn" {
   description = "ARN of the IAM service role for AWS Audit Manager"
-  value       = var.enable_audit_manager ? aws_iam_role.audit_manager[0].arn : null
+  value       = module.iam.role_arn
 }
 
 ################################################################################
@@ -20,17 +20,17 @@ output "audit_manager_service_role_arn" {
 
 output "evidence_bucket_id" {
   description = "ID of the S3 bucket used for evidence storage"
-  value       = local.create_evidence_bucket ? aws_s3_bucket.evidence[0].id : null
+  value       = module.s3.bucket_id
 }
 
 output "evidence_bucket_arn" {
   description = "ARN of the S3 bucket used for evidence storage"
-  value       = local.create_evidence_bucket ? aws_s3_bucket.evidence[0].arn : null
+  value       = module.s3.bucket_arn
 }
 
 output "evidence_bucket_name" {
   description = "Name of the S3 bucket used for evidence storage"
-  value       = local.create_evidence_bucket ? aws_s3_bucket.evidence[0].bucket : null
+  value       = module.s3.bucket_name
 }
 
 ################################################################################
@@ -39,12 +39,12 @@ output "evidence_bucket_name" {
 
 output "kms_key_id" {
   description = "ID of the KMS key used for evidence bucket encryption (if created)"
-  value       = local.create_kms_key ? aws_kms_key.evidence[0].key_id : null
+  value       = module.kms.key_id
 }
 
 output "kms_key_arn" {
   description = "ARN of the KMS key used for evidence bucket encryption (if created)"
-  value       = local.create_kms_key ? aws_kms_key.evidence[0].arn : null
+  value       = module.kms.key_arn
 }
 
 ################################################################################
@@ -53,16 +53,12 @@ output "kms_key_arn" {
 
 output "assessment_ids" {
   description = "Map of assessment names to their IDs"
-  value = local.create_assessments ? {
-    for name, assessment in aws_auditmanager_assessment.main : name => assessment.id
-  } : {}
+  value       = module.assessments.assessment_ids
 }
 
 output "assessment_arns" {
-  description = "Map of assessment names to their ARNs"
-  value = local.create_assessments ? {
-    for name, assessment in aws_auditmanager_assessment.main : name => assessment.arn
-  } : {}
+  description = "Map of assessment names to ARNs"
+  value       = module.assessments.assessment_arns
 }
 
 ################################################################################

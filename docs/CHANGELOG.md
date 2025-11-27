@@ -36,5 +36,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - IAM policies following principle of least privilege
 - S3 access logging enabled
 
-[Unreleased]: https://github.com/damienjburks/terraform-aws-audit-manager/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/damienjburks/terraform-aws-audit-manager/releases/tag/v1.0.0
+### Fixed
+- Framework ID validation - module now requires UUIDs instead of ARNs
+- Assessment reports destination now defaults to evidence bucket
+
+[Unreleased]: https://github.com/damienjburks/terraform-aws-audit-manager/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/damienjburks/terraform-aws-audit-manager/releases/tag/v0.1.0

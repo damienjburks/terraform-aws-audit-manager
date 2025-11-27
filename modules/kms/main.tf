@@ -1,19 +1,14 @@
-# KMS Key Resources for Evidence Bucket Encryption
-
-################################################################################
-# KMS Key for Evidence Bucket
-################################################################################
+# KMS Key Module for Evidence Bucket Encryption
 
 resource "aws_kms_key" "evidence" {
-  count = local.create_kms_key ? 1 : 0
+  count = var.create_key ? 1 : 0
 
   description             = "KMS key for AWS Audit Manager evidence bucket encryption"
   deletion_window_in_days = 30
   enable_key_rotation     = true
 
-  # Prevent accidental deletion of KMS key
   lifecycle {
-    prevent_destroy = false # Set to true in production to prevent accidental deletion
+    prevent_destroy = false
   }
 
   policy = jsonencode({
@@ -23,7 +18,7 @@ resource "aws_kms_key" "evidence" {
         Sid    = "Enable IAM User Permissions"
         Effect = "Allow"
         Principal = {
-          AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+          AWS = "arn:aws:iam::${var.account_id}:root"
         }
         Action   = "kms:*"
         Resource = "*"
@@ -42,7 +37,7 @@ resource "aws_kms_key" "evidence" {
         Resource = "*"
         Condition = {
           StringEquals = {
-            "kms:ViaService" = "s3.${var.aws_region}.amazonaws.com"
+            "kms:ViaService" = "s3.${var.region}.amazonaws.com"
           }
         }
       },
@@ -61,23 +56,12 @@ resource "aws_kms_key" "evidence" {
     ]
   })
 
-  tags = merge(
-    var.tags,
-    {
-      Name      = "audit-manager-evidence-key"
-      Purpose   = "AWS Audit Manager Evidence Encryption"
-      ManagedBy = "Terraform"
-    }
-  )
+  tags = var.tags
 }
 
-################################################################################
-# KMS Key Alias
-################################################################################
-
 resource "aws_kms_alias" "evidence" {
-  count = local.create_kms_key ? 1 : 0
+  count = var.create_key ? 1 : 0
 
-  name          = local.kms_key_alias
+  name          = var.key_alias
   target_key_id = aws_kms_key.evidence[0].key_id
 }
