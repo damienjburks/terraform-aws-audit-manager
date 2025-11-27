@@ -363,7 +363,8 @@ Below are common framework names. Use the AWS CLI command above to get the actua
 - NIST 800-53 Rev. 5
 - FedRAMP Moderate
 
-**Note**: Framework UUIDs are region-specific and may change. Always use the AWS CLI to get current UUIDs for your region.
+> [!NOTE]
+> Framework UUIDs are region-specific and may change. Always use the AWS CLI to get current UUIDs for your region.
 
 ## Best Practices
 
@@ -395,54 +396,13 @@ Below are common framework names. Use the AWS CLI command above to get the actua
 3. **Assessment Frequency**: Balance compliance needs with cost
 4. **Evidence Cleanup**: Regularly review and clean up old evidence
 
-## Troubleshooting
-
-### Common Issues
-
-**Issue**: Terraform validation fails with "region not supported"  
-**Solution**: Verify the region is in the supported regions list above
-
-**Issue**: Assessment creation fails  
-**Solution**: Ensure AWS Config is enabled for the services in the assessment scope
-
-**Issue**: Evidence not being collected  
-**Solution**: Verify CloudTrail is enabled and the service role has correct permissions
-
-**Issue**: Organization mode registration fails  
-**Solution**: Ensure you're running from the management account with appropriate permissions
-
-## Contributing
-
-Contributions are welcome! Please follow these guidelines:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-### Development
-
-```bash
-# Format code
-terraform fmt -recursive
-
-# Validate configuration
-terraform validate
-
-# Run examples
-cd examples/single-account
-terraform init
-terraform plan
-```
-
 ## License
 
 MIT Licensed. See [LICENSE](./LICENSE) for full details.
 
 ## Authors
 
-Module managed by the Damien Burks.
+Module is maintained by [Damien Burks](https://github.com/damienjburks)
 
 ## Additional Resources
 
