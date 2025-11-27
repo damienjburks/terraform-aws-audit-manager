@@ -130,7 +130,7 @@ variable "assessments" {
       destination_type = string
     }))
   }))
-  description = "List of assessments to create in Audit Manager. Each assessment requires a name, framework ID, scope (accounts and services), and assigned roles."
+  description = "List of assessments to create in Audit Manager. Each assessment requires a name, framework UUID (not ARN - use 'aws auditmanager list-assessment-frameworks' to find UUIDs), scope (accounts and services), and assigned roles."
   default     = []
 
   validation {

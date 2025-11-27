@@ -128,7 +128,7 @@ module "audit_manager" {
   assessments = [
     {
       name         = "cis-aws-foundations-v1.4"
-      framework_id = "arn:aws:auditmanager:us-east-1:aws:framework/CIS_AWS_Foundations_Benchmark_v1.4.0"
+      framework_id = "12345678-1234-1234-1234-123456789012"  # Replace with actual UUID from AWS CLI
       description  = "CIS AWS Foundations Benchmark v1.4.0 assessment"
       scope = {
         aws_accounts = ["123456789012"]
@@ -187,7 +187,7 @@ module "audit_manager" {
   assessments = [
     {
       name         = "cis-benchmark"
-      framework_id = "arn:aws:auditmanager:us-east-1:aws:framework/CIS_AWS_Foundations_Benchmark_v1.4.0"
+      framework_id = "12345678-1234-1234-1234-123456789012"  # Replace with CIS framework UUID
       scope = {
         aws_accounts = ["123456789012"]
         aws_services = ["ec2", "s3", "iam"]
@@ -201,7 +201,7 @@ module "audit_manager" {
     },
     {
       name         = "pci-dss"
-      framework_id = "arn:aws:auditmanager:us-east-1:aws:framework/PCI_DSS_v3.2.1"
+      framework_id = "87654321-4321-4321-4321-210987654321"  # Replace with PCI DSS framework UUID
       scope = {
         aws_accounts = ["123456789012"]
         aws_services = ["ec2", "rds", "s3"]
@@ -255,7 +255,7 @@ Each example includes:
 ```hcl
 {
   name         = string                    # Assessment name
-  framework_id = string                    # Framework ID or ARN
+  framework_id = string                    # Framework UUID (use AWS CLI to find)
   description  = optional(string)          # Assessment description
   scope = {
     aws_accounts = list(string)            # Account IDs in scope
@@ -266,7 +266,7 @@ Each example includes:
     role_type = string                     # "PROCESS_OWNER" or "RESOURCE_OWNER"
   })
   assessment_reports_destination = optional({
-    destination      = string              # S3 URI
+    destination      = string              # S3 URI (defaults to evidence bucket)
     destination_type = string              # "S3"
   })
 }
@@ -316,47 +316,54 @@ This module implements AWS security best practices:
 - **Immutable Evidence**: Versioning prevents evidence tampering
 - **Audit Trail**: Complete logging of all access to evidence
 
-## Standard Framework IDs
+## Finding Framework IDs
 
-Common AWS Audit Manager framework IDs (replace `{region}` with your region):
+**Important**: AWS Audit Manager requires framework UUIDs (not ARNs) when creating assessments. Framework UUIDs are unique identifiers in the format `12345678-1234-1234-1234-123456789012`.
 
-### Security & Best Practices
+### How to Find Framework UUIDs
 
-- **CIS AWS Foundations Benchmark v1.4.0**  
-  `arn:aws:auditmanager:{region}:aws:framework/CIS_AWS_Foundations_Benchmark_v1.4.0`
+```bash
+# List all standard AWS frameworks
+aws auditmanager list-assessment-frameworks \
+  --framework-type Standard \
+  --region us-east-1 \
+  --query 'frameworkMetadataList[*].[name,id]' \
+  --output table
 
-- **AWS Control Tower**  
-  `arn:aws:auditmanager:{region}:aws:framework/AWS_Control_Tower`
+# List custom frameworks
+aws auditmanager list-assessment-frameworks \
+  --framework-type Custom \
+  --region us-east-1 \
+  --query 'frameworkMetadataList[*].[name,id]' \
+  --output table
+```
 
-### Payment Card Industry
+### Common Standard Frameworks
 
-- **PCI DSS v3.2.1**  
-  `arn:aws:auditmanager:{region}:aws:framework/PCI_DSS_v3.2.1`
+Below are common framework names. Use the AWS CLI command above to get the actual UUIDs for your region:
 
-### Privacy & Data Protection
+#### Security & Best Practices
+- CIS AWS Foundations Benchmark v1.2.0
+- CIS AWS Foundations Benchmark v1.4.0
+- AWS Control Tower
 
-- **GDPR**  
-  `arn:aws:auditmanager:{region}:aws:framework/GDPR`
+#### Payment Card Industry
+- PCI DSS v3.2.1
 
-### Healthcare
+#### Privacy & Data Protection
+- GDPR
 
-- **HIPAA**  
-  `arn:aws:auditmanager:{region}:aws:framework/HIPAA`
+#### Healthcare
+- HIPAA
 
-### Service Organization Controls
+#### Service Organization Controls
+- SOC 2
 
-- **SOC 2**  
-  `arn:aws:auditmanager:{region}:aws:framework/SOC_2`
+#### Government & Federal
+- NIST 800-53 Rev. 5
+- FedRAMP Moderate
 
-### Government & Federal
-
-- **NIST 800-53 Rev. 5**  
-  `arn:aws:auditmanager:{region}:aws:framework/NIST_800_53_Rev_5`
-
-- **FedRAMP Moderate**  
-  `arn:aws:auditmanager:{region}:aws:framework/FedRAMP_Moderate`
-
-**Note**: Framework availability may vary by region. Consult AWS documentation for the most current list.
+**Note**: Framework UUIDs are region-specific and may change. Always use the AWS CLI to get current UUIDs for your region.
 
 ## Best Practices
 

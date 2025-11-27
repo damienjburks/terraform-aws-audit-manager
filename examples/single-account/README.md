@@ -48,13 +48,24 @@ terraform apply
 
 ### With Assessments
 
-To create assessments, you can provide the `assessments` variable. Here's an example using a standard framework:
+To create assessments, you need to provide the framework UUID (not ARN). First, find the framework UUID:
+
+```bash
+# List available frameworks and their UUIDs
+aws auditmanager list-assessment-frameworks \
+  --framework-type Standard \
+  --region us-east-1 \
+  --query 'frameworkMetadataList[*].[name,id]' \
+  --output table
+```
+
+Then provide the `assessments` variable with the UUID:
 
 ```hcl
 assessments = [
   {
     name         = "cis-aws-foundations"
-    framework_id = "arn:aws:auditmanager:us-east-1:aws:framework/CIS_AWS_Foundations_Benchmark_v1.4.0"
+    framework_id = "12345678-1234-1234-1234-123456789012"  # Replace with actual UUID from AWS CLI
     description  = "CIS AWS Foundations Benchmark assessment"
     scope = {
       aws_accounts = ["123456789012"] # Your AWS account ID
@@ -88,15 +99,27 @@ tags = {
 }
 ```
 
-## Standard Framework IDs
+## Finding Framework UUIDs
 
-Common AWS Audit Manager framework IDs (replace region as needed):
+**Important**: You must use framework UUIDs (not ARNs) when creating assessments.
 
-- **CIS AWS Foundations Benchmark v1.4.0**: `arn:aws:auditmanager:us-east-1:aws:framework/CIS_AWS_Foundations_Benchmark_v1.4.0`
-- **PCI DSS v3.2.1**: `arn:aws:auditmanager:us-east-1:aws:framework/PCI_DSS_v3.2.1`
-- **GDPR**: `arn:aws:auditmanager:us-east-1:aws:framework/GDPR`
-- **HIPAA**: `arn:aws:auditmanager:us-east-1:aws:framework/HIPAA`
-- **SOC 2**: `arn:aws:auditmanager:us-east-1:aws:framework/SOC_2`
+Use the AWS CLI to find framework UUIDs:
+
+```bash
+aws auditmanager list-assessment-frameworks \
+  --framework-type Standard \
+  --region us-east-1 \
+  --query 'frameworkMetadataList[*].[name,id]' \
+  --output table
+```
+
+Common framework names to look for:
+- CIS AWS Foundations Benchmark v1.2.0
+- CIS AWS Foundations Benchmark v1.4.0
+- PCI DSS v3.2.1
+- GDPR
+- HIPAA
+- SOC 2
 
 ## Outputs
 

@@ -43,7 +43,24 @@ variable "assessments" {
     }))
   }))
   description = "List of assessments to create"
-  default     = []
+  default = [
+    # Example assessment - Update with your actual values
+    # To find framework UUIDs, run: aws auditmanager list-assessment-frameworks --framework-type Standard
+    # {
+    #   name         = "nist-800-53"
+    #   framework_id = "12345678-1234-1234-1234-123456789012"  # Replace with actual framework UUID
+    #   scope = {
+    #     aws_accounts = ["123456789012"]  # Replace with your account ID
+    #     aws_services = ["ec2", "s3", "iam"]
+    #   }
+    #   roles = [
+    #     {
+    #       role_arn  = "arn:aws:iam::123456789012:role/AuditManagerRole"  # Replace with your role ARN
+    #       role_type = "PROCESS_OWNER"
+    #     }
+    #   ]
+    # }
+  ]
 }
 
 variable "tags" {

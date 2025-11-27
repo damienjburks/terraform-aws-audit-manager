@@ -7,8 +7,10 @@
 resource "aws_auditmanager_assessment" "main" {
   for_each = local.create_assessments ? { for assessment in var.assessments : assessment.name => assessment } : {}
 
-  name         = each.value.name
-  description  = lookup(each.value, "description", "Assessment for ${each.value.name}")
+  name = each.value.name
+  description = lookup(each.value, "description", "Assessment for ${each.value.name}")
+  # framework_id must be a UUID, not an ARN
+  # To find framework UUIDs, use: aws auditmanager list-assessment-frameworks --framework-type Standard
   framework_id = each.value.framework_id
 
   # Assessment scope configuration
@@ -39,13 +41,10 @@ resource "aws_auditmanager_assessment" "main" {
     }
   }
 
-  # Assessment reports destination (optional)
-  dynamic "assessment_reports_destination" {
-    for_each = lookup(each.value, "assessment_reports_destination", null) != null ? [each.value.assessment_reports_destination] : []
-    content {
-      destination      = assessment_reports_destination.value.destination
-      destination_type = assessment_reports_destination.value.destination_type
-    }
+  # Assessment reports destination (required by AWS)
+  assessment_reports_destination {
+    destination      = lookup(each.value, "assessment_reports_destination", null) != null ? each.value.assessment_reports_destination.destination : "s3://${local.evidence_bucket_name}"
+    destination_type = lookup(each.value, "assessment_reports_destination", null) != null ? each.value.assessment_reports_destination.destination_type : "S3"
   }
 
   tags = merge(
