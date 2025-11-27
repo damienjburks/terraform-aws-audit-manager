@@ -36,7 +36,7 @@ resource "aws_iam_role" "audit_manager" {
 ################################################################################
 
 resource "aws_iam_policy" "audit_manager_s3" {
-  count = var.create_role && var.bucket_arn != null ? 1 : 0
+  count = var.create_role && var.create_bucket_policy ? 1 : 0
 
   name        = "AWSAuditManagerS3Access-${var.account_id}"
   description = "Policy allowing AWS Audit Manager to write evidence to S3 bucket"
@@ -81,7 +81,7 @@ resource "aws_iam_policy" "audit_manager_s3" {
 ################################################################################
 
 resource "aws_iam_role_policy_attachment" "audit_manager_s3" {
-  count = var.create_role && var.bucket_arn != null ? 1 : 0
+  count = var.create_role && var.create_bucket_policy ? 1 : 0
 
   role       = aws_iam_role.audit_manager[0].name
   policy_arn = aws_iam_policy.audit_manager_s3[0].arn

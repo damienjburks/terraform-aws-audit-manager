@@ -3,6 +3,11 @@ variable "create_role" {
   description = "Whether to create the IAM role"
 }
 
+variable "create_bucket_policy" {
+  type        = bool
+  description = "Whether to create the S3 bucket policy (should match whether bucket is being created)"
+}
+
 variable "account_id" {
   type        = string
   description = "AWS account ID"

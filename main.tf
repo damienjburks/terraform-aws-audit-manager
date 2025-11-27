@@ -57,10 +57,11 @@ module "s3" {
 module "iam" {
   source = "./modules/iam"
 
-  create_role = var.enable_audit_manager
-  account_id  = data.aws_caller_identity.current.account_id
-  bucket_arn  = module.s3.bucket_arn
-  kms_key_arn = var.evidence_bucket_kms_key_arn != null ? var.evidence_bucket_kms_key_arn : module.kms.key_arn
+  create_role          = var.enable_audit_manager
+  create_bucket_policy = local.create_evidence_bucket
+  account_id           = data.aws_caller_identity.current.account_id
+  bucket_arn           = module.s3.bucket_arn
+  kms_key_arn          = var.evidence_bucket_kms_key_arn != null ? var.evidence_bucket_kms_key_arn : module.kms.key_arn
 
   tags = merge(
     var.tags,
