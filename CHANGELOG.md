@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2024-11-26
+
+### Changed
+- Refactored module structure into sub-modules for better organization
+  - Created `modules/s3` for evidence bucket resources
+  - Created `modules/kms` for encryption key resources
+  - Created `modules/iam` for IAM roles and policies
+  - Created `modules/assessments` for assessment resources
+- Moved documentation files to `docs/` directory
+- Improved module maintainability and testability
+
+### Added
+- CODE_OF_CONDUCT.md for community guidelines
+- CONTRIBUTING.md with detailed contribution guidelines
+- Helper script `scripts/list-frameworks.sh` to find framework UUIDs
+- Comprehensive documentation on finding framework UUIDs
+
+### Fixed
+- Framework ID validation - clarified that UUIDs (not ARNs) are required
+- Assessment reports destination now properly defaults to evidence bucket
+- Updated all examples to use framework UUID placeholders
+
 ## [0.1.0] - 2024-11-26
 
 ### Added
@@ -36,9 +58,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - IAM policies following principle of least privilege
 - S3 access logging enabled
 
-### Fixed
-- Framework ID validation - module now requires UUIDs instead of ARNs
-- Assessment reports destination now defaults to evidence bucket
-
-[Unreleased]: https://github.com/damienjburks/terraform-aws-audit-manager/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/damienjburks/terraform-aws-audit-manager/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/damienjburks/terraform-aws-audit-manager/releases/tag/v0.1.1
 [0.1.0]: https://github.com/damienjburks/terraform-aws-audit-manager/releases/tag/v0.1.0
